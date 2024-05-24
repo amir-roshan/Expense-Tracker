@@ -4,6 +4,7 @@ import TextField, { TextFieldProps } from "@mui/material/TextField";
 interface CustomTextFieldProps extends Omit<TextFieldProps, "id"> {
   label: string;
   id: string;
+  options?: { value: string; label: string }[];
 }
 
 const CustomTextField: React.FC<CustomTextFieldProps> = ({
@@ -22,11 +23,11 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
         marginBottom: 2, // Add margin bottom
         "& .MuiOutlinedInput-root": {
           "&:not(.Mui-focused) .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#880e4f", // Change border color when not focused
+            borderColor: "#880e4f",
           },
         },
       }}
-      {...props} // Spread the rest of the props
+      {...props}
     />
   );
 };
