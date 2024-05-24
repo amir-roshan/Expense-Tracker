@@ -1,18 +1,22 @@
-import React, { useRef } from "react";
 import Box from "@mui/material/Box";
 import FormCard from "./FormCard";
 import Button from "@mui/material/Button";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import SelectCard from "./SelectCard";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+interface FormData {
+  description: string;
+  amount: string;
+  category: string;
+}
 
 const InputForm = () => {
-  let description;
-  let amount;
-  let category;
-
-  const descriptionRef = useRef<HTMLInputElement>(null);
-  const amountRef = useRef<HTMLInputElement>(null);
-  const categoryRef = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
   const categoryList = [
     {
@@ -29,12 +33,8 @@ const InputForm = () => {
     },
   ];
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    description = descriptionRef.current?.value;
-    amount = amountRef.current?.value;
-    category = categoryRef.current?.value;
-    console.log(description, amount, category);
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    console.log(data);
   };
   return (
     <>
@@ -48,26 +48,36 @@ const InputForm = () => {
         justifyContent="center"
         alignItems="center"
         flexDirection="column"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
       >
+        {errors.description && (
+          <span className="alert alert-danger p-1">
+            Description is required
+          </span>
+        )}
         <FormCard
           label="Description"
           id="Description1"
-          inputRef={descriptionRef}
+          inputRef={register("description", { required: true }).ref}
         />
+        {errors.amount && (
+          <span className="alert alert-danger p-1">Amount is required</span>
+        )}
         <FormCard
           type="number"
           label="Amount"
           id="Amount"
-          inputRef={amountRef}
+          inputRef={register("amount", { required: true }).ref}
         />
+        {errors.category && (
+          <span className="alert alert-danger p-1">Category is required</span>
+        )}
         <SelectCard
           options={categoryList}
           label="Category"
           id="Category"
-          inputRef={categoryRef}
+          inputRef={register("category", { required: true }).ref}
         />
-
         <Button
           type="submit"
           variant="outlined"
