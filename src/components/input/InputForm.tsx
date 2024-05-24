@@ -1,9 +1,9 @@
+import React, { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import FormCard from "./FormCard";
 import Button from "@mui/material/Button";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import SelectCard from "./SelectCard";
-import { SubmitHandler, useForm } from "react-hook-form";
 
 interface FormData {
   description: string;
@@ -12,11 +12,11 @@ interface FormData {
 }
 
 const InputForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
+  const [errors, setErrors] = useState<Partial<FormData>>({});
+
+  const descriptionRef = useRef<HTMLInputElement>(null);
+  const amountRef = useRef<HTMLInputElement>(null);
+  const categoryRef = useRef<HTMLSelectElement>(null);
 
   const categoryList = [
     {
@@ -29,66 +29,125 @@ const InputForm = () => {
     },
     {
       value: "entertainment",
-      label: "Entertainments",
+      label: "Entertainment",
     },
   ];
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log(data);
+  const validateField = (name: string, value: string) => {
+    switch (name) {
+      case "description":
+        if (!value) {
+          return "Description is required";
+        }
+        break;
+      case "amount":
+        if (!value) {
+          return "Amount is required";
+        } else if (parseFloat(value) < 0) {
+          return "Amount must be non-negative";
+        }
+        break;
+      case "category":
+        if (!value) {
+          return "Category is required";
+        }
+        break;
+      default:
+        return "";
+    }
+    return "";
   };
+
+  const handleChange = (name: keyof FormData, value: string) => {
+    const error = validateField(name, value);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    const description = descriptionRef.current?.value || "";
+    const amount = amountRef.current?.value || "";
+    const category = categoryRef.current?.value || "";
+    const validationErrors: Partial<FormData> = {
+      description: validateField("description", description),
+      amount: validateField("amount", amount),
+      category: validateField("category", category),
+    };
+
+    if (
+      !validationErrors.description &&
+      !validationErrors.amount &&
+      !validationErrors.category
+    ) {
+      console.log({ description, amount, category });
+    } else {
+      setErrors(validationErrors);
+    }
+  };
+
   return (
-    <>
-      <Box
-        margin="auto"
-        width="70%"
-        component="form"
-        className=""
-        marginTop={10}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        flexDirection="column"
-        onSubmit={handleSubmit(onSubmit)}
+    <Box
+      margin="auto"
+      width="70%"
+      component="form"
+      marginTop={10}
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      flexDirection="column"
+      onSubmit={handleSubmit}
+    >
+      <FormCard
+        label="Description"
+        id="Description1"
+        inputRef={descriptionRef}
+        onChange={() =>
+          handleChange("description", descriptionRef.current?.value || "")
+        }
+      />
+      {errors.description && (
+        <span className="alert alert-danger p-1">{errors.description}</span>
+      )}
+
+      <FormCard
+        type="number"
+        label="Amount"
+        id="Amount"
+        inputRef={amountRef}
+        onChange={() =>
+          handleChange("amount", amountRef.current?.value || "groceries")
+        }
+      />
+      {errors.amount && (
+        <span className="alert alert-danger p-1">{errors.amount}</span>
+      )}
+
+      <SelectCard
+        options={categoryList}
+        label="Category"
+        id="Category"
+        inputRef={categoryRef}
+        onChange={() =>
+          handleChange("category", categoryRef.current?.value || "")
+        }
+      />
+      {errors.category && (
+        <span className="alert alert-danger p-1">{errors.category}</span>
+      )}
+
+      <Button
+        type="submit"
+        variant="outlined"
+        color="secondary"
+        size="large"
+        endIcon={<AddShoppingCartIcon sx={{ color: "#880e4f" }} />}
       >
-        {errors.description && (
-          <span className="alert alert-danger p-1">
-            Description is required
-          </span>
-        )}
-        <FormCard
-          label="Description"
-          id="Description1"
-          inputRef={register("description", { required: true }).ref}
-        />
-        {errors.amount && (
-          <span className="alert alert-danger p-1">Amount is required</span>
-        )}
-        <FormCard
-          type="number"
-          label="Amount"
-          id="Amount"
-          inputRef={register("amount", { required: true }).ref}
-        />
-        {errors.category && (
-          <span className="alert alert-danger p-1">Category is required</span>
-        )}
-        <SelectCard
-          options={categoryList}
-          label="Category"
-          id="Category"
-          inputRef={register("category", { required: true }).ref}
-        />
-        <Button
-          type="submit"
-          variant="outlined"
-          color="secondary"
-          size="large"
-          endIcon={<AddShoppingCartIcon sx={{ color: "#880e4f" }} />}
-        >
-          Add to your cart
-        </Button>
-      </Box>
-    </>
+        Add to your cart
+      </Button>
+    </Box>
   );
 };
 

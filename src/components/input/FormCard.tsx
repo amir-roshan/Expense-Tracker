@@ -7,11 +7,7 @@ interface CustomTextFieldProps extends Omit<TextFieldProps, "id"> {
   options?: { value: string; label: string }[];
 }
 
-const CustomTextField: React.FC<CustomTextFieldProps> = ({
-  label,
-  id,
-  ...props
-}) => {
+const FormCard: React.FC<CustomTextFieldProps> = ({ label, id, ...props }) => {
   return (
     <TextField
       size="medium"
@@ -32,4 +28,4 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
   );
 };
 
-export default CustomTextField;
+export default FormCard;
