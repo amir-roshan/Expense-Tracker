@@ -13,11 +13,12 @@ interface Props {
   description: string;
   amount: string;
   category: string;
+  onDelete: () => void;
 }
 
-const ProductCard = ({ category, description, amount }: Props) => {
+const ProductCard = ({ category, description, amount, onDelete }: Props) => {
   return (
-    <Card minWidth="md" maxWidth="2xl" mt={4} mr={2} ml={2}>
+    <Card minWidth="md" maxWidth="2xl" mt={5} mr={2} ml={2}>
       <CardBody background="#ffe5ec">
         <Flex justify="space-between" align="center">
           <Stack mt="6" spacing="3">
@@ -34,6 +35,8 @@ const ProductCard = ({ category, description, amount }: Props) => {
             size="lg"
             icon={<DeleteIcon />}
             background="transparent"
+            onClick={onDelete}
+            _hover={{ background: "transparent", backgroundColor: "#f8bbd0" }}
           />
         </Flex>
       </CardBody>

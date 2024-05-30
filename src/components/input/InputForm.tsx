@@ -59,6 +59,12 @@ const InputForm = () => {
     return "";
   };
 
+  const handleDelete = (index: number) => {
+    const newProducts = [...products];
+    newProducts.splice(index, 1);
+    setProducts(newProducts);
+  };
+
   const handleChange = (name: keyof FormData, value: string) => {
     const error = validateField(name, value);
     setErrors((prevErrors) => ({
@@ -167,6 +173,7 @@ const InputForm = () => {
           ? products.map((product, index) => {
               return (
                 <Cart
+                  onDelete={() => handleDelete(index)}
                   key={index}
                   description={
                     product.description.charAt(0).toUpperCase() +
