@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Box, Button, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import FormCard from "./FormCard";
 import SelectCard from "./SelectCard";
@@ -162,18 +162,26 @@ const InputForm = () => {
           Add to your cart
         </Button>
       </VStack>
-      {products.length > 0
-        ? products.map((product, index) => {
-            return (
-              <Cart
-                key={index}
-                discription={product.description}
-                amount={product.amount}
-                category={product.category}
-              />
-            );
-          })
-        : null}
+      <Flex alignItems="center" flexDirection="column">
+        {products.length > 0
+          ? products.map((product, index) => {
+              return (
+                <Cart
+                  key={index}
+                  description={
+                    product.description.charAt(0).toUpperCase() +
+                    product.description.slice(1)
+                  }
+                  amount={product.amount}
+                  category={
+                    product.category.charAt(0).toUpperCase() +
+                    product.category.slice(1)
+                  }
+                />
+              );
+            })
+          : null}
+      </Flex>
     </Box>
   );
 };

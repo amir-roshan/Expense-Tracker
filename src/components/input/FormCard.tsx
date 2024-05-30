@@ -22,6 +22,7 @@ const FormCard: React.FC<FormCardProps> = ({
       {label}
     </FormLabel>
     <Input
+      fill={"#Pink 400"}
       _hover={{
         borderColor: "#ff4081",
       }}

@@ -1,37 +1,44 @@
 import {
   Card,
   CardBody,
-  CardFooter,
   Stack,
-  Divider,
-  ButtonGroup,
-  Button,
-  Text,
   Heading,
+  Text,
+  IconButton,
+  Flex,
 } from "@chakra-ui/react";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 interface Props {
-  discription: string;
+  description: string;
   amount: string;
   category: string;
 }
 
-const Cart = ({ discription, amount, category }: Props) => {
+const ProductCard = ({ category, description, amount }: Props) => {
   return (
-    <Card maxW="sm" m={2}>
-      <CardBody>
-        <Stack mt="6" spacing="3">
-          <Heading size="md">{category}</Heading>
-          <Text color="blue.600" fontSize="2xl">
-            {amount}
-          </Text>
-          <Text>{discription}</Text>
-        </Stack>
+    <Card minWidth="md" maxWidth="2xl" mt={4} mr={2} ml={2}>
+      <CardBody background="#ffe5ec">
+        <Flex justify="space-between" align="center">
+          <Stack mt="6" spacing="3">
+            <Heading color="#000" size="md">
+              {category}
+            </Heading>
+            <Text color="#333" fontSize="2xl">
+              {description}
+            </Text>
+            <Text color="#000">{amount}</Text>
+          </Stack>
+          <IconButton
+            aria-label="Delete icon"
+            size="lg"
+            icon={<DeleteIcon />}
+            background="transparent"
+          />
+        </Flex>
       </CardBody>
-      <Divider />
-      <CardFooter></CardFooter>
     </Card>
   );
 };
 
-export default Cart;
+export default ProductCard;
