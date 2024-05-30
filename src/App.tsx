@@ -1,15 +1,16 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@chakra-ui/react";
 import InputForm from "./components/input/InputForm";
 
 const App: React.FC = () => {
   return (
     <Box
-      sx={{
-        padding: 1,
-        backgroundColor: "#F8E8EE", // Add background color
-        minHeight: "100vh", // Ensure it takes the full viewport height
-      }}
+      p={4}
+      bg="#F8E8EE"
+      minH="100vh"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
     >
       <InputForm />
     </Box>

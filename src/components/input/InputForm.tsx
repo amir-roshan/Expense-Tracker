@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
-import Box from "@mui/material/Box";
+import { Box, Button, Text, VStack } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 import FormCard from "./FormCard";
-import Button from "@mui/material/Button";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import SelectCard from "./SelectCard";
+import Cart from "./Cart";
 
 interface FormData {
   description: string;
@@ -12,6 +12,7 @@ interface FormData {
 }
 
 const InputForm = () => {
+  const [products, setProducts] = useState<FormData[]>([]);
   const [errors, setErrors] = useState<Partial<FormData>>({});
 
   const descriptionRef = useRef<HTMLInputElement>(null);
@@ -82,7 +83,14 @@ const InputForm = () => {
       !validationErrors.amount &&
       !validationErrors.category
     ) {
-      console.log({ description, amount, category });
+      setProducts([
+        ...products,
+        {
+          description: description,
+          amount: amount,
+          category: category,
+        },
+      ]);
     } else {
       setErrors(validationErrors);
     }
@@ -92,61 +100,80 @@ const InputForm = () => {
     <Box
       margin="auto"
       width="70%"
-      component="form"
       marginTop={10}
       display="flex"
       justifyContent="center"
       alignItems="center"
       flexDirection="column"
+      as="form"
       onSubmit={handleSubmit}
     >
-      <FormCard
-        label="Description"
-        id="Description1"
-        inputRef={descriptionRef}
-        onChange={() =>
-          handleChange("description", descriptionRef.current?.value || "")
-        }
-      />
-      {errors.description && (
-        <span className="alert alert-danger p-1">{errors.description}</span>
-      )}
+      <VStack spacing={4} width="100%">
+        <FormCard
+          label="Description"
+          id="Description1"
+          inputRef={descriptionRef}
+          onChange={() =>
+            handleChange("description", descriptionRef.current?.value || "")
+          }
+        />
+        {errors.description && (
+          <Text color="red.500" fontSize="sm">
+            {errors.description}
+          </Text>
+        )}
 
-      <FormCard
-        type="number"
-        label="Amount"
-        id="Amount"
-        inputRef={amountRef}
-        onChange={() =>
-          handleChange("amount", amountRef.current?.value || "groceries")
-        }
-      />
-      {errors.amount && (
-        <span className="alert alert-danger p-1">{errors.amount}</span>
-      )}
+        <FormCard
+          type="number"
+          label="Amount"
+          id="Amount"
+          inputRef={amountRef}
+          onChange={() =>
+            handleChange("amount", amountRef.current?.value || "")
+          }
+        />
+        {errors.amount && (
+          <Text color="red.500" fontSize="sm">
+            {errors.amount}
+          </Text>
+        )}
 
-      <SelectCard
-        options={categoryList}
-        label="Category"
-        id="Category"
-        inputRef={categoryRef}
-        onChange={() =>
-          handleChange("category", categoryRef.current?.value || "")
-        }
-      />
-      {errors.category && (
-        <span className="alert alert-danger p-1">{errors.category}</span>
-      )}
+        <SelectCard
+          options={categoryList}
+          label="Category"
+          id="Category"
+          inputRef={categoryRef}
+          onChange={() =>
+            handleChange("category", categoryRef.current?.value || "")
+          }
+        />
+        {errors.category && (
+          <Text color="red.500" fontSize="sm">
+            {errors.category}
+          </Text>
+        )}
 
-      <Button
-        type="submit"
-        variant="outlined"
-        color="secondary"
-        size="large"
-        endIcon={<AddShoppingCartIcon sx={{ color: "#880e4f" }} />}
-      >
-        Add to your cart
-      </Button>
+        <Button
+          type="submit"
+          colorScheme="pink"
+          size="lg"
+          rightIcon={<AddIcon />}
+        >
+          Add to your cart
+        </Button>
+      </VStack>
+      {products.length > 0
+        ? products.map((product, index) => {
+            return (
+              <Cart
+                key={index}
+                discription={product.description}
+                amount={product.amount}
+                category={product.category}
+              />
+            );
+          })
+        : null}
     </Box>
   );
 };

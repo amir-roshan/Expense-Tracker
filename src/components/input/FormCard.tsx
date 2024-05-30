@@ -1,31 +1,39 @@
-import React from "react";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+// FormCard.tsx
+import React, { RefObject } from "react";
+import { FormControl, FormLabel, Input } from "@chakra-ui/react";
 
-interface CustomTextFieldProps extends Omit<TextFieldProps, "id"> {
+interface FormCardProps {
   label: string;
   id: string;
-  options?: { value: string; label: string }[];
+  inputRef: RefObject<HTMLInputElement>;
+  onChange: () => void;
+  type?: string; // Optional prop for input type
 }
 
-const FormCard: React.FC<CustomTextFieldProps> = ({ label, id, ...props }) => {
-  return (
-    <TextField
-      size="medium"
-      fullWidth
-      label={label}
-      id={id}
-      color="secondary"
-      sx={{
-        marginBottom: 2, // Add margin bottom
-        "& .MuiOutlinedInput-root": {
-          "&:not(.Mui-focused) .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#880e4f",
-          },
-        },
+const FormCard: React.FC<FormCardProps> = ({
+  label,
+  id,
+  inputRef,
+  onChange,
+  type = "text",
+}) => (
+  <FormControl>
+    <FormLabel color={"black"} htmlFor={id}>
+      {label}
+    </FormLabel>
+    <Input
+      _hover={{
+        borderColor: "#ff4081",
       }}
-      {...props}
+      color={"black"}
+      id={id}
+      ref={inputRef}
+      onChange={onChange}
+      type={type}
+      focusBorderColor="#ff4081"
+      borderColor="#880e4f"
     />
-  );
-};
+  </FormControl>
+);
 
 export default FormCard;

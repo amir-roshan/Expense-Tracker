@@ -1,5 +1,5 @@
 import React from "react";
-import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { FormControl, FormLabel, Select } from "@chakra-ui/react";
 
 interface SelectCardProps {
   label: string;
@@ -16,46 +16,36 @@ const SelectCard: React.FC<SelectCardProps> = ({
   inputRef,
   onChange,
 }) => (
-  <FormControl fullWidth sx={{ marginBottom: 2 }}>
-    <InputLabel id={`${id}-label`}>{label}</InputLabel>
+  <FormControl id={id} mb={4}>
+    <FormLabel color={"#000"} htmlFor={id}>
+      {label}
+    </FormLabel>
     <Select
-      labelId={`${id}-label`}
+      color={"#000"}
+      ref={inputRef}
       id={id}
-      label={label}
-      inputRef={inputRef}
+      placeholder="Select option"
       onChange={onChange}
-      defaultValue=""
-      sx={{
-        "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: "#880e4f",
-          transition: "border-color 0.3s ease, border-width 0.3s ease",
-        },
-        "&:hover .MuiOutlinedInput-notchedOutline": {
-          borderColor: "#ff4081",
-          borderWidth: "2px",
-        },
-        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-          borderColor: "#ff4081",
-        },
+      focusBorderColor="#ff4081"
+      borderColor="#880e4f"
+      _hover={{
+        borderColor: "#ff4081",
+        backgroundColor: "#f8bbd0",
+      }}
+      _focus={{
+        borderColor: "#ff4081",
       }}
     >
       {options.map((option) => (
-        <MenuItem
+        <option
           key={option.value}
           value={option.value}
-          sx={{
+          style={{
             backgroundColor: "#f8bbd0",
-            "&:hover": {
-              backgroundColor: "#f48fb1",
-            },
-            "&.Mui-selected": {
-              backgroundColor: "#880e4f",
-              color: "#fff",
-            },
           }}
         >
           {option.label}
-        </MenuItem>
+        </option>
       ))}
     </Select>
   </FormControl>
